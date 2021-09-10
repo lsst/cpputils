@@ -12,7 +12,7 @@ for header in ['cxxabi.h', 'execinfo.h']:
         break
 
 if backtraceEnable:
-    env.Prepend(CCFLAGS=['-DLSST_UTILS_BACKTRACE_ENABLE'])
+    env.Prepend(CCFLAGS=['-DLSST_CPPUTILS_BACKTRACE_ENABLE'])
 
 env = conf.Finish()
 

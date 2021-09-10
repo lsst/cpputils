@@ -19,7 +19,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from lsst.utils import backtrace
+from lsst.cpputils import backtrace
 from _backtrace import generateSegfault
 
 if backtrace.isEnabled():

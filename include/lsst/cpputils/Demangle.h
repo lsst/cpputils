@@ -1,3 +1,5 @@
+// -*- lsst-c++ -*-
+
 /*
  * LSST Data Management System
  * Copyright 2008, 2009, 2010 LSST Corporation.
@@ -20,28 +22,15 @@
  * see <http://www.lsstcorp.org/LegalNotices/>.
  */
 
-#include "lsst/cpputils/packaging.h"
+#if !defined(LSST_CPPUTILS_DEMANGLE_H)
+#define LSST_CPPUTILS_DEMANGLE_H 1
 
-#include <iostream>
-#include <sstream>
 #include <string>
-#include "lsst/pex/exceptions.h"
 
 namespace lsst {
 namespace cpputils {
 
-std::string getPackageDir(std::string const& packageName) {
-    std::string envVar = packageName;      // package's environment variable
-
-    transform(envVar.begin(), envVar.end(), envVar.begin(), (int (*)(int)) toupper);
-    envVar += "_DIR";
-
-    char const *dir = getenv(envVar.c_str());
-    if (!dir) {
-        throw LSST_EXCEPT(lsst::pex::exceptions::NotFoundError, "Package " + packageName + " not found");
-    }
-
-    return dir;
-}
+std::string demangleType(std::string const _typeName);
 
 }} // namespace lsst::cpputils
+#endif

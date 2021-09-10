@@ -1,4 +1,4 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2008, 2009, 2010 LSST Corporation.
  *
@@ -20,7 +20,7 @@
  * see <http://www.lsstcorp.org/LegalNotices/>.
  */
 
-#include "lsst/utils/Demangle.h"
+#include "lsst/cpputils/Demangle.h"
 
 #include <iostream>
 #include <string>
@@ -32,7 +32,7 @@
 #include <boost/multi_index/member.hpp>
 
 namespace lsst {
-namespace utils {
+namespace cpputils {
 /*
  * Provide a symbol table for "substitutions" while mangling
  */
@@ -303,4 +303,4 @@ std::string demangleType(std::string const _typeName) {
 #endif
 }
 
-}} // namespace lsst::utils
+}} // namespace lsst::cpputils

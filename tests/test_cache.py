@@ -21,7 +21,6 @@
 
 import unittest
 
-import lsst.utils.tests
 from _cache import NumbersCache
 
 
@@ -70,8 +69,8 @@ def numberToWords(value):
     return numberToWords(hundreds) + " hundred" + ((" " + numberToWords(rest)) if rest > 0 else "")
 
 
-class CacheTestCase(lsst.utils.tests.TestCase):
-    """Tests of lsst.utils.Cache"""
+class CacheTestCase(unittest.TestCase):
+    """Tests of lsst.cpputils.Cache"""
     def check(self, addFunction):
         """Exercise the Cache
 
@@ -136,15 +135,5 @@ class CacheTestCase(lsst.utils.tests.TestCase):
             cache(999, trap)
 
 
-class TestMemory(lsst.utils.tests.MemoryTestCase):
-    pass
-
-
-def setup_module(module):
-    lsst.utils.tests.init()
-
-
 if __name__ == "__main__":
-    import sys
-    setup_module(sys.modules[__name__])
     unittest.main()

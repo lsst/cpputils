@@ -22,14 +22,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "lsst/utils/Magnitude.h"
+#include "lsst/cpputils/Magnitude.h"
 
 namespace lsst {
-namespace utils {
+namespace cpputils {
 
 double nanojanskyToABMagnitude(double flux) { return -2.5 * log10(flux / referenceFlux); }
 
 double ABMagnitudeToNanojansky(double magnitude) { return pow(10, magnitude / -2.5) * referenceFlux; }
 
-}  // namespace utils
+}  // namespace cpputils
 }  // namespace lsst

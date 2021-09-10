@@ -1,4 +1,7 @@
+// -*- LSST-C++ -*-
 /*
+ * This file is part of utils.
+ *
  * Developed for the LSST Data Management System.
  * This product includes software developed by the LSST Project
  * (https://www.lsst.org).
@@ -19,28 +22,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
+/**
+ * @file
+ * @brief Utilities for converting between flux and magnitude in C++.
+ *
+ * Use `astropy.units` `ABmag` and `nJy` for converstions in python:
+ * @code{.python}
+ *   import astropy.units as u
+ *   mag = (flux*u.nJy).to_value(u.ABmag)
+ *   flux = (mag*u.ABmag).to_value(u.nJy)
+ * @endcode
+ */
 
-#include <utility>
+#ifndef LSST_CPPUTILS_MAGNITUDE_H
+#define LSST_CPPUTILS_MAGNITUDE_H
 
-#include "lsst/cpputils/python.h"
-
-namespace py = pybind11;
-using namespace pybind11::literals;
+#include <cmath>
 
 namespace lsst {
 namespace cpputils {
-namespace python {
 
-PYBIND11_MODULE(_cppIndex, mod) {
-    // wrap cppIndex in order to make it easy to test
-    mod.def("cppIndex", (std::size_t(*)(std::ptrdiff_t, std::ptrdiff_t))cppIndex, "size"_a, "i"_a);
-    mod.def("cppIndex", (std::pair<std::size_t, std::size_t>(*)(std::ptrdiff_t, std::ptrdiff_t,
-                                                                std::ptrdiff_t, std::ptrdiff_t))cppIndex,
-            "size_i"_a, "size_j"_a, "i"_a, "j"_a);
-}
+/// The Oke & Gunn (1983) AB magnitude reference flux, in nJy (often approximated as 3631.0).
+const double referenceFlux = 1e23 * pow(10, (48.6 / -2.5)) * 1e9;
 
-}  // python
-}  // utils
-}  // lsst
+/// Convert a flux in nanojansky to AB magnitude.
+double nanojanskyToABMagnitude(double flux);
+
+/// Convert an AB magnitude to a flux in nanojansky.
+double ABMagnitudeToNanojansky(double magnitude);
+
+}  // namespace cpputils
+}  // namespace lsst
+
+#endif  // LSST_CPPUTILS_MAGNITUDE_H

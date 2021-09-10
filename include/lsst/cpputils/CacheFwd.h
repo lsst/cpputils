@@ -1,6 +1,6 @@
 /*
  * LSST Data Management System
- * Copyright 2008, 2009, 2010 LSST Corporation.
+ * See COPYRIGHT file at the top of the source tree.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -19,29 +19,23 @@
  * the GNU General Public License along with this program.  If not,
  * see <http://www.lsstcorp.org/LegalNotices/>.
  */
+#ifndef LSST_CPPUTILS_CACHE_FWD_H
+#define LSST_CPPUTILS_CACHE_FWD_H
 
-#include "lsst/cpputils/packaging.h"
+/** Forward declarations for lsst::cpputils::Cache
+ *
+ * For details on the Cache class, see the Cache.h file.
+ */
 
-#include <iostream>
-#include <sstream>
-#include <string>
-#include "lsst/pex/exceptions.h"
+#include <functional>  // std::equal_to, std::hash
 
 namespace lsst {
 namespace cpputils {
 
-std::string getPackageDir(std::string const& packageName) {
-    std::string envVar = packageName;      // package's environment variable
-
-    transform(envVar.begin(), envVar.end(), envVar.begin(), (int (*)(int)) toupper);
-    envVar += "_DIR";
-
-    char const *dir = getenv(envVar.c_str());
-    if (!dir) {
-        throw LSST_EXCEPT(lsst::pex::exceptions::NotFoundError, "Package " + packageName + " not found");
-    }
-
-    return dir;
-}
+template <typename Key, typename Value, typename KeyHash=std::hash<Key>,
+          typename KeyPred=std::equal_to<Key>>
+class Cache;
 
 }} // namespace lsst::cpputils
+
+#endif // ifndef LSST_CPPUTILS_CACHE_FWD_H

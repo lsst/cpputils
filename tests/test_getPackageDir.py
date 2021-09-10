@@ -19,17 +19,15 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import sys
 import os
 import unittest
 
-import lsst.utils.tests
-from lsst.utils import getPackageDir
+from lsst.cpputils import getPackageDir
 
 
 class GetPackageDirTestCase(unittest.TestCase):
     def testBasics(self):
-        utilsPath = getPackageDir("utils")
+        utilsPath = getPackageDir("cpputils")
         self.assertTrue(os.path.isfile(os.path.join(utilsPath, "tests", "test_getPackageDir.py")))
 
         # Confirm that we have a correct Python exception and pex exception
@@ -41,18 +39,9 @@ class GetPackageDirTestCase(unittest.TestCase):
         self.assertIn("NotFoundError", type(cm.exception).__name__)
 
     def testUnicodeBasics(self):
-        utilsPath = getPackageDir(u"utils")
+        utilsPath = getPackageDir(u"cpputils")
         self.assertTrue(os.path.isfile(os.path.join(utilsPath, "tests", "test_getPackageDir.py")))
 
 
-class TestMemory(lsst.utils.tests.MemoryTestCase):
-    pass
-
-
-def setup_module(module):
-    lsst.utils.tests.init()
-
-
 if __name__ == "__main__":
-    setup_module(sys.modules[__name__])
     unittest.main()

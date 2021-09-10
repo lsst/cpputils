@@ -20,27 +20,27 @@
  */
 
 #include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
-
-#include <utility>
 
 #include "lsst/cpputils/python.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
-
 namespace lsst {
 namespace cpputils {
-namespace python {
 
-PYBIND11_MODULE(_cppIndex, mod) {
-    // wrap cppIndex in order to make it easy to test
-    mod.def("cppIndex", (std::size_t(*)(std::ptrdiff_t, std::ptrdiff_t))cppIndex, "size"_a, "i"_a);
-    mod.def("cppIndex", (std::pair<std::size_t, std::size_t>(*)(std::ptrdiff_t, std::ptrdiff_t,
-                                                                std::ptrdiff_t, std::ptrdiff_t))cppIndex,
-            "size_i"_a, "size_j"_a, "i"_a, "j"_a);
+void wrapBacktrace(python::WrapperCollection & wrappers);
+void wrapPackaging(python::WrapperCollection & wrappers);
+void wrapDemangle(python::WrapperCollection & wrappers);
+
+PYBIND11_MODULE(_cpputils, mod) {
+    python::WrapperCollection wrappers(mod, "_cpputils");
+    {
+        auto backtraceWrappers = wrappers.makeSubmodule("backtrace");
+        wrapBacktrace(backtraceWrappers);
+        wrappers.collectSubmodule(std::move(backtraceWrappers));
+    }
+    wrapPackaging(wrappers);
+    wrapDemangle(wrappers);
+    wrappers.finish();
 }
 
-}  // python
 }  // utils
 }  // lsst

@@ -22,7 +22,7 @@
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 
-#if defined(LSST_UTILS_BACKTRACE_ENABLE) && (defined(__clang__) || defined(__GNUC__))
+#if defined(LSST_CPPUTILS_BACKTRACE_ENABLE) && (defined(__clang__) || defined(__GNUC__))
 
 #include <cerrno>
 #include <cstdio>
@@ -34,10 +34,10 @@
 
 #include <regex>
 
-#include "lsst/utils/Backtrace.h"
+#include "lsst/cpputils/Backtrace.h"
 
 namespace lsst {
-namespace utils {
+namespace cpputils {
 
 namespace {
 
@@ -164,19 +164,19 @@ Backtrace::Backtrace() noexcept : enabled(true) {
     signal(SIGFPE, signalHandler);
 }
 
-}  // namespace utils
+}  // namespace cpputils
 }  // namespace lsst
 
 #else
 
-#include "lsst/utils/Backtrace.h"
+#include "lsst/cpputils/Backtrace.h"
 
 namespace lsst {
-namespace utils {
+namespace cpputils {
 
 Backtrace::Backtrace() noexcept : enabled(false) {}
 
-}  // namespace utils
+}  // namespace cpputils
 }  // namespace lsst
 
 #endif

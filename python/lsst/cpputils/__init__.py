@@ -19,30 +19,11 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import os
-import sys
-import unittest
-import subprocess
+# We are raising pex exceptions from C++ so need to ensure the python
+# translations are registered.
+import lsst.pex.exceptions
 
-from lsst.cpputils import backtrace
+from ._cpputils import *
+from . import backtrace
 
-ROOT = os.path.abspath(os.path.dirname(__file__))
-
-
-class BacktraceTestCase(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def test_segfault(self):
-        if backtrace.isEnabled():
-            with self.assertRaises(subprocess.CalledProcessError) as cm:
-                subprocess.check_output([sys.executable, os.path.join(ROOT, "backtrace.py")],
-                                        stderr=subprocess.STDOUT)
-
-            output = cm.exception.output.decode()
-            print(output)
-            self.assertIn("backtrace follows", output)
-
-
-if __name__ == "__main__":
-    unittest.main()
+from .version import *
