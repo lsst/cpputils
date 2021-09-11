@@ -20,7 +20,7 @@
  * see <http://www.lsstcorp.org/LegalNotices/>.
  */
 
-#include "lsst/cpputils/packaging.h"
+#include "lsst/utils/packaging.h"
 
 #include <iostream>
 #include <sstream>
@@ -28,7 +28,7 @@
 #include "lsst/pex/exceptions.h"
 
 namespace lsst {
-namespace cpputils {
+namespace utils {
 
 std::string getPackageDir(std::string const& packageName) {
     std::string envVar = packageName;      // package's environment variable
@@ -44,4 +44,4 @@ std::string getPackageDir(std::string const& packageName) {
     return dir;
 }
 
-}} // namespace lsst::cpputils
+}} // namespace lsst::utils

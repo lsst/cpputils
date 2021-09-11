@@ -21,10 +21,10 @@
 
 #include "pybind11/pybind11.h"
 
-#include "lsst/cpputils/python.h"
+#include "lsst/utils/python.h"
 
 namespace lsst {
-namespace cpputils {
+namespace utils {
 
 void wrapBacktrace(python::WrapperCollection & wrappers);
 void wrapPackaging(python::WrapperCollection & wrappers);

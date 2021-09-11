@@ -33,7 +33,7 @@
 #include "boost/format.hpp"
 
 #include "lsst/pex/exceptions.h"
-#include "lsst/cpputils/CacheFwd.h"
+#include "lsst/utils/CacheFwd.h"
 
 //#define LSST_CACHE_DEBUG 1  // Define this variable to instrument for debugging
 
@@ -42,11 +42,11 @@
 #include <iostream>
 #include <fstream>
 #include <typeinfo>
-#include "lsst/cpputils/Demangle.h"
+#include "lsst/utils/Demangle.h"
 #endif
 
 namespace lsst {
-namespace cpputils {
+namespace utils {
 
 /** Cache of most recently used values
  *
@@ -68,7 +68,7 @@ namespace cpputils {
  * `std::unique_ptr`.
  *
  * @note Python bindings (for pybind11) are available in
- * `lsst/cpputils/python/Cache.h`.
+ * `lsst/utils/python/Cache.h`.
  */
 template <typename Key, typename Value, typename KeyHash, typename KeyPred>
 class Cache {
@@ -339,7 +339,7 @@ Cache<Key, Value, KeyHash, KeyPred>::~Cache() {
 }
 #endif
 
-}} // namespace lsst::cpputils
+}} // namespace lsst::utils
 
 
 #endif // ifndef LSST_CPPUTILS_CACHE_H

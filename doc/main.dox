@@ -1,4 +1,4 @@
-namespace lsst { namespace cpputils {
+namespace lsst { namespace utils {
 
 /**
 \mainpage lsst::cpputils;  utility classes
@@ -6,8 +6,8 @@ namespace lsst { namespace cpputils {
 \section utils_introduction Introduction
 
 This is a collection of miscellaneous C++-based utility functions, classes and macros, including:
-- \ref lsst::cpputils::getPackageDir and lsst.cpputils.getPackageDir provide an equivalent
+- \ref lsst::utils::getPackageDir and lsst.cpputils.getPackageDir provide an equivalent
   to the eups productDir function
 */
 
-}} // namespace lsst::cpputils
+}} // namespace lsst::utils

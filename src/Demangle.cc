@@ -20,7 +20,7 @@
  * see <http://www.lsstcorp.org/LegalNotices/>.
  */
 
-#include "lsst/cpputils/Demangle.h"
+#include "lsst/utils/Demangle.h"
 
 #include <iostream>
 #include <string>
@@ -32,7 +32,7 @@
 #include <boost/multi_index/member.hpp>
 
 namespace lsst {
-namespace cpputils {
+namespace utils {
 /*
  * Provide a symbol table for "substitutions" while mangling
  */
@@ -303,4 +303,4 @@ std::string demangleType(std::string const _typeName) {
 #endif
 }
 
-}} // namespace lsst::cpputils
+}} // namespace lsst::utils

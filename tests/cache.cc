@@ -19,9 +19,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "lsst/cpputils/python/Cache.h"
+#include "lsst/utils/python/Cache.h"
 
 PYBIND11_MODULE(_cache, mod) {
-    lsst::cpputils::Cache<int, std::string> cache;
-    lsst::cpputils::python::declareCache<int, std::string>(mod, "NumbersCache");
+    lsst::utils::Cache<int, std::string> cache;
+    lsst::utils::python::declareCache<int, std::string>(mod, "NumbersCache");
 }

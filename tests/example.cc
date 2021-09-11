@@ -26,8 +26,8 @@
 #include "pybind11/operators.h"
 #include "pybind11/numpy.h"
 
-#include "lsst/cpputils/python.h"
-#include "lsst/cpputils/python/TemplateInvoker.h"
+#include "lsst/utils/python.h"
+#include "lsst/utils/python/TemplateInvoker.h"
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -108,7 +108,7 @@ TypeHolder<T> returnTypeHolder() {
     return TypeHolder<T>();
 }
 
-void wrapExample(lsst::cpputils::python::WrapperCollection & wrappers) {
+void wrapExample(lsst::utils::python::WrapperCollection & wrappers) {
     wrappers.wrapType(
         py::class_<Example>(wrappers.module, "Example"),
         [](auto & mod, auto & cls) {
@@ -126,15 +126,15 @@ void wrapExample(lsst::cpputils::python::WrapperCollection & wrappers) {
             cls.def(py::self == py::self);
             cls.def(py::self != py::self);
 
-            lsst::cpputils::python::addOutputOp(cls, "__str__");
-            lsst::cpputils::python::addOutputOp(cls, "__repr__");
+            lsst::utils::python::addOutputOp(cls, "__str__");
+            lsst::utils::python::addOutputOp(cls, "__repr__");
         }
     );
 }
 
 
 PYBIND11_MODULE(_example, mod) {
-    lsst::cpputils::python::WrapperCollection wrappers(mod, "example");
+    lsst::utils::python::WrapperCollection wrappers(mod, "example");
     wrapExample(wrappers);
     wrappers.wrap(
         [](auto & mod) {
@@ -170,7 +170,7 @@ PYBIND11_MODULE(_example, mod) {
             mod.def(
                 "returnTypeHolder",
                 [](py::dtype const & dtype) {
-                    return lsst::cpputils::python::TemplateInvoker(
+                    return lsst::utils::python::TemplateInvoker(
                         // lambda to handle errors
                         [](py::dtype const & dtype) -> py::object {
                             return py::none();
@@ -179,7 +179,7 @@ PYBIND11_MODULE(_example, mod) {
                         // universal lambda to handle successful match
                         [](auto t) { return returnTypeHolder<decltype(t)>(); },
                         dtype,
-                        lsst::cpputils::python::TemplateInvoker::Tag<std::uint16_t, std::int32_t, float>()
+                        lsst::utils::python::TemplateInvoker::Tag<std::uint16_t, std::int32_t, float>()
                     );
                 },
                 "dtype"_a

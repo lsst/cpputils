@@ -34,10 +34,10 @@
 
 #include <regex>
 
-#include "lsst/cpputils/Backtrace.h"
+#include "lsst/utils/Backtrace.h"
 
 namespace lsst {
-namespace cpputils {
+namespace utils {
 
 namespace {
 
@@ -164,19 +164,19 @@ Backtrace::Backtrace() noexcept : enabled(true) {
     signal(SIGFPE, signalHandler);
 }
 
-}  // namespace cpputils
+}  // namespace utils
 }  // namespace lsst
 
 #else
 
-#include "lsst/cpputils/Backtrace.h"
+#include "lsst/utils/Backtrace.h"
 
 namespace lsst {
-namespace cpputils {
+namespace utils {
 
 Backtrace::Backtrace() noexcept : enabled(false) {}
 
-}  // namespace cpputils
+}  // namespace utils
 }  // namespace lsst
 
 #endif

@@ -32,7 +32,7 @@
 #include <type_traits>
 
 namespace lsst {
-namespace cpputils {
+namespace utils {
 
 namespace {
 // Variable template reporting whether a type can be printed using <<
@@ -105,7 +105,7 @@ void assertHashesEqual(T obj1, T obj2) {
     printIfHashEqual(obj1, obj2, Hash());
 }
 
-}  // namespace cpputils
+}  // namespace utils
 }  // namespace lsst
 
 #endif

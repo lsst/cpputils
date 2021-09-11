@@ -1,6 +1,6 @@
 #include <iostream>
 #include <typeinfo>
-#include "lsst/cpputils/Demangle.h"
+#include "lsst/utils/Demangle.h"
 
 
 template<typename T1, typename T2>
@@ -12,6 +12,6 @@ int main()
 
     std::cout << typeid(im).name()
               << " "
-              << lsst::cpputils::demangleType(typeid(im).name())
+              << lsst::utils::demangleType(typeid(im).name())
               << std::endl;
 }

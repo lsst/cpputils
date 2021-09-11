@@ -28,6 +28,6 @@
 // THIS FILE IS FOR BACKWARDS-COMPATIBILITY ONLY; NEW CODE SHOULD INCLUDE
 // packaging.h DIRECTLY.
 
-#include "lsst/cpputils/packaging.h"
+#include "lsst/utils/packaging.h"
 
 #endif

@@ -26,7 +26,7 @@
 #define LSST_CPPUTILS_BACKTRACE_H
 
 namespace lsst {
-namespace cpputils {
+namespace utils {
 
 /**
  *  Singleton, enables automatic backtraces on the following signals:
@@ -61,7 +61,7 @@ private:
     bool const enabled;
 };
 
-}  // namespace cpputils
+}  // namespace utils
 }  // namespace lsst
 
 #endif

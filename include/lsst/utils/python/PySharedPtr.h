@@ -29,7 +29,7 @@
 #include <memory>
 
 namespace lsst {
-namespace cpputils {
+namespace utils {
 namespace python {
 
 /* Workaround for C++ objects outliving Python objects
@@ -85,10 +85,10 @@ private:
 };
 
 }  // namespace python
-}  // namespace cpputils
+}  // namespace utils
 }  // namespace lsst
 
 // Macro must be called in the global namespace
-PYBIND11_DECLARE_HOLDER_TYPE(T, lsst::cpputils::python::PySharedPtr<T>);
+PYBIND11_DECLARE_HOLDER_TYPE(T, lsst::utils::python::PySharedPtr<T>);
 
 #endif

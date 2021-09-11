@@ -24,13 +24,13 @@
 #include <memory>
 #include <string>
 
-#include "lsst/cpputils/python/PySharedPtr.h"
+#include "lsst/utils/python/PySharedPtr.h"
 
 namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace lsst {
-namespace cpputils {
+namespace utils {
 namespace python {
 /* Test framework based on example by cdyson37,
  * https://github.com/pybind/pybind11/issues/1546
@@ -84,5 +84,5 @@ PYBIND11_MODULE(_inheritance, mod) {
 }
 
 }  // namespace python
-}  // namespace cpputils
+}  // namespace utils
 }  // namespace lsst

@@ -2,7 +2,7 @@
 
 /*
  * LSST Data Management System
- * Copyright 2008, 2009, 2010 LSST Corporation.
+ * See COPYRIGHT file at the top of the source tree.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -22,15 +22,23 @@
  * see <http://www.lsstcorp.org/LegalNotices/>.
  */
 
-#if !defined(LSST_CPPUTILS_DEMANGLE_H)
-#define LSST_CPPUTILS_DEMANGLE_H 1
+#ifndef LSST_CPPUTILS_PACKAGING_H
+#define LSST_CPPUTILS_PACKAGING_H
 
 #include <string>
 
 namespace lsst {
-namespace cpputils {
+namespace utils {
 
-std::string demangleType(std::string const _typeName);
+/*!
+ * \brief return the root directory of a setup package
+ *
+ * \param[in] packageName  name of package (e.g. "utils")
+ *
+ * \throw lsst::pex::exceptions::NotFoundError if desired version can't be found
+ */
+std::string getPackageDir(std::string const& packageName);
 
-}} // namespace lsst::cpputils
+}} // namespace lsst::utils
+
 #endif
