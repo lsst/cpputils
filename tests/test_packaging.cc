@@ -36,9 +36,15 @@ using namespace lsst::cpputils;
 BOOST_AUTO_TEST_SUITE(PackagingSuite)
 
 BOOST_AUTO_TEST_CASE(GetPackage) {
-    std::filesystem::path utilsPath{getPackageDir("cpputils")};
-    BOOST_CHECK(std::filesystem::is_regular_file(utilsPath / "tests" / "test_packaging.cc"));
+    std::filesystem::path cpputilsPath{getPackageDir("cpputils")};
+    BOOST_CHECK(std::filesystem::is_regular_file(cpputilsPath / "tests" / "test_packaging.cc"));
     BOOST_CHECK_THROW(getPackageDir("nameOfNonexistendPackage2234q?#!"),
+                      lsst::pex::exceptions::NotFoundError);
+
+    // Again with the lsst::utils namespace
+    std::filesystem::path utilsPath{lsst::utils::getPackageDir("cpputils")};
+    BOOST_CHECK(std::filesystem::is_regular_file(utilsPath / "tests" / "test_packaging.cc"));
+    BOOST_CHECK_THROW(lsst::utils::getPackageDir("nameOfNonexistendPackage2234q?#!"),
                       lsst::pex::exceptions::NotFoundError);
 }
 
