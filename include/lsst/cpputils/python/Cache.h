@@ -60,6 +60,8 @@ void declareCache(py::module & mod, std::string const& name) {
     cls.def("flush", &Class::flush);
 }
 
-}}} // namespace lsst::cpputils::python
+}}
+namespace utils = cpputils;
+} // namespace lsst::cpputils::python
 
 #endif // ifndef LSST_CPPUTILS_PYTHON_CACHE_H

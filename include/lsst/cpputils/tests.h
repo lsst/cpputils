@@ -106,6 +106,7 @@ void assertHashesEqual(T obj1, T obj2) {
 }
 
 }  // namespace cpputils
+namespace utils = cpputils;
 }  // namespace lsst
 
 #endif

@@ -86,6 +86,7 @@ private:
 
 }  // namespace python
 }  // namespace cpputils
+namespace utils = cpputils;
 }  // namespace lsst
 
 // Macro must be called in the global namespace

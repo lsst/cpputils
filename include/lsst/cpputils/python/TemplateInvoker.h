@@ -180,6 +180,8 @@ private:
     OnErrorCallback _onError;
 };
 
-}}}  // namespace lsst::cpputils::python
+}}
+namespace utils = cpputils;
+}  // namespace lsst::cpputils::python
 
 #endif

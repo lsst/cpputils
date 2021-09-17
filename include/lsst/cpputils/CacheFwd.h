@@ -36,6 +36,8 @@ template <typename Key, typename Value, typename KeyHash=std::hash<Key>,
           typename KeyPred=std::equal_to<Key>>
 class Cache;
 
-}} // namespace lsst::cpputils
+}
+namespace utils = cpputils;
+} // namespace lsst::cpputils
 
 #endif // ifndef LSST_CPPUTILS_CACHE_FWD_H
