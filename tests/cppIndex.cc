@@ -24,13 +24,13 @@
 
 #include <utility>
 
-#include "lsst/utils/python.h"
+#include "lsst/cpputils/python.h"
 
 namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace lsst {
-namespace utils {
+namespace cpputils {
 namespace python {
 
 PYBIND11_MODULE(_cppIndex, mod) {

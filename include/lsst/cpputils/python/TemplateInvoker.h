@@ -29,7 +29,7 @@
 
 #include <iostream>
 
-namespace lsst { namespace utils { namespace python {
+namespace lsst { namespace cpputils { namespace python {
 
 /**
  * A helper class for wrapping C++ template functions as Python functions with dtype arguments.
@@ -180,6 +180,6 @@ private:
     OnErrorCallback _onError;
 };
 
-}}}  // namespace lsst::utils::python
+}}}  // namespace lsst::cpputils::python
 
 #endif

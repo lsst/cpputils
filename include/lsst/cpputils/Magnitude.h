@@ -40,7 +40,7 @@
 #include <cmath>
 
 namespace lsst {
-namespace utils {
+namespace cpputils {
 
 /// The Oke & Gunn (1983) AB magnitude reference flux, in nJy (often approximated as 3631.0).
 const double referenceFlux = 1e23 * pow(10, (48.6 / -2.5)) * 1e9;
@@ -51,7 +51,7 @@ double nanojanskyToABMagnitude(double flux);
 /// Convert an AB magnitude to a flux in nanojansky.
 double ABMagnitudeToNanojansky(double magnitude);
 
-}  // namespace utils
+}  // namespace cpputils
 }  // namespace lsst
 
 #endif  // LSST_CPPUTILS_MAGNITUDE_H

@@ -27,19 +27,19 @@
 #include "pybind11/stl.h"
 #include "pybind11/functional.h"  // for binding std::function
 
-#include "lsst/utils/Cache.h"
+#include "lsst/cpputils/Cache.h"
 
 namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace lsst {
-namespace utils {
+namespace cpputils {
 namespace python {
 
 template <typename Key, typename Value, typename KeyHash=boost::hash<Key>,
           typename KeyPred=std::equal_to<Key>>
 void declareCache(py::module & mod, std::string const& name) {
-    typedef lsst::utils::Cache<Key, Value, KeyHash, KeyPred> Class;
+    typedef lsst::cpputils::Cache<Key, Value, KeyHash, KeyPred> Class;
     py::class_<Class> cls(mod, name.c_str());
 
     cls.def(py::init<std::size_t>(), "maxElements"_a=0);
@@ -60,6 +60,6 @@ void declareCache(py::module & mod, std::string const& name) {
     cls.def("flush", &Class::flush);
 }
 
-}}} // namespace lsst::utils::python
+}}} // namespace lsst::cpputils::python
 
 #endif // ifndef LSST_CPPUTILS_PYTHON_CACHE_H

@@ -25,7 +25,7 @@
 #include <functional>
 
 namespace lsst {
-namespace utils {
+namespace cpputils {
 
 /**
  * Combine hashes
@@ -98,6 +98,6 @@ std::size_t hashIterable(std::size_t seed, InputIterator begin, InputIterator en
     return result;
 }
 
-}} // namespace lsst::utils
+}} // namespace lsst::cpputils
 
 #endif

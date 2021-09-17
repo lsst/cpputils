@@ -22,7 +22,7 @@
 #ifndef LSST_CPPUTILS_CACHE_FWD_H
 #define LSST_CPPUTILS_CACHE_FWD_H
 
-/** Forward declarations for lsst::utils::Cache
+/** Forward declarations for lsst::cpputils::Cache
  *
  * For details on the Cache class, see the Cache.h file.
  */
@@ -30,12 +30,12 @@
 #include <functional>  // std::equal_to, std::hash
 
 namespace lsst {
-namespace utils {
+namespace cpputils {
 
 template <typename Key, typename Value, typename KeyHash=std::hash<Key>,
           typename KeyPred=std::equal_to<Key>>
 class Cache;
 
-}} // namespace lsst::utils
+}} // namespace lsst::cpputils
 
 #endif // ifndef LSST_CPPUTILS_CACHE_FWD_H

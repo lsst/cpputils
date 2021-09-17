@@ -40,7 +40,7 @@
 #include "lsst/pex/exceptions/python/Exception.h"
 
 namespace lsst {
-namespace utils {
+namespace cpputils {
 namespace python {
 
 /**
@@ -454,6 +454,6 @@ private:
 };
 
 
-}}}  // namespace lsst::utils::python
+}}}  // namespace lsst::cpputils::python
 
 #endif
