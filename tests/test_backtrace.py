@@ -24,13 +24,12 @@ import sys
 import unittest
 import subprocess
 
-import lsst.utils.tests
-from lsst.utils import backtrace
+from lsst.cpputils import backtrace
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 
 
-class BacktraceTestCase(lsst.utils.tests.TestCase):
+class BacktraceTestCase(unittest.TestCase):
     def setUp(self):
         pass
 
@@ -45,14 +44,5 @@ class BacktraceTestCase(lsst.utils.tests.TestCase):
             self.assertIn("backtrace follows", output)
 
 
-class TestMemory(lsst.utils.tests.MemoryTestCase):
-    pass
-
-
-def setup_module(module):
-    lsst.utils.tests.init()
-
-
 if __name__ == "__main__":
-    setup_module(sys.modules[__name__])
     unittest.main()

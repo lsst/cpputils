@@ -19,16 +19,14 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import sys
 import unittest
 import numpy as np
 
-import lsst.utils.tests
 from _cppIndex import cppIndex
 import _example
 
 
-class Pybind11TestCase(lsst.utils.tests.TestCase):
+class Pybind11TestCase(unittest.TestCase):
     """A test case basic pybind11 wrapping"""
 
     def setUp(self):
@@ -198,14 +196,5 @@ class Pybind11TestCase(lsst.utils.tests.TestCase):
         self.assertIsNone(_example.returnTypeHolder(np.dtype(np.float64)))
 
 
-class TestMemory(lsst.utils.tests.MemoryTestCase):
-    pass
-
-
-def setup_module(module):
-    lsst.utils.tests.init()
-
-
 if __name__ == "__main__":
-    setup_module(sys.modules[__name__])
     unittest.main()

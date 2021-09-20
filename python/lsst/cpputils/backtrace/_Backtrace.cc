@@ -21,25 +21,24 @@
 
 #include "pybind11/pybind11.h"
 
-#include "lsst/utils/python.h"
+#include "lsst/cpputils/python.h"
+#include "lsst/cpputils/Backtrace.h"
+
+namespace py = pybind11;
 
 namespace lsst {
-namespace utils {
+namespace cpputils {
 
-void wrapBacktrace(python::WrapperCollection & wrappers);
-void wrapPackaging(python::WrapperCollection & wrappers);
-void wrapDemangle(python::WrapperCollection & wrappers);
-
-PYBIND11_MODULE(_utils, mod) {
-    python::WrapperCollection wrappers(mod, "_utils");
-    {
-        auto backtraceWrappers = wrappers.makeSubmodule("backtrace");
-        wrapBacktrace(backtraceWrappers);
-        wrappers.collectSubmodule(std::move(backtraceWrappers));
-    }
-    wrapPackaging(wrappers);
-    wrapDemangle(wrappers);
-    wrappers.finish();
+void wrapBacktrace(python::WrapperCollection & wrappers) {
+    wrappers.wrap(
+        [](auto & mod) {
+            Backtrace &backtrace = Backtrace::get();
+            // Trick to tell the compiler backtrace is used and should not be
+            // optimized away, as well as convenient way to check if backtrace
+            // is enabled.
+            mod.def("isEnabled", [&backtrace]() -> bool { return backtrace.isEnabled(); });
+        }
+    );
 }
 
 }  // utils

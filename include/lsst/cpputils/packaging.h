@@ -1,6 +1,8 @@
+// -*- lsst-c++ -*-
+
 /*
  * LSST Data Management System
- * Copyright 2008, 2009, 2010 LSST Corporation.
+ * See COPYRIGHT file at the top of the source tree.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -20,28 +22,25 @@
  * see <http://www.lsstcorp.org/LegalNotices/>.
  */
 
-#include "lsst/cpputils/packaging.h"
+#ifndef LSST_CPPUTILS_PACKAGING_H
+#define LSST_CPPUTILS_PACKAGING_H
 
-#include <iostream>
-#include <sstream>
 #include <string>
-#include "lsst/pex/exceptions.h"
 
 namespace lsst {
 namespace cpputils {
 
-std::string getPackageDir(std::string const& packageName) {
-    std::string envVar = packageName;      // package's environment variable
+/*!
+ * \brief return the root directory of a setup package
+ *
+ * \param[in] packageName  name of package (e.g. "utils")
+ *
+ * \throw lsst::pex::exceptions::NotFoundError if desired version can't be found
+ */
+std::string getPackageDir(std::string const& packageName);
 
-    transform(envVar.begin(), envVar.end(), envVar.begin(), (int (*)(int)) toupper);
-    envVar += "_DIR";
-
-    char const *dir = getenv(envVar.c_str());
-    if (!dir) {
-        throw LSST_EXCEPT(lsst::pex::exceptions::NotFoundError, "Package " + packageName + " not found");
-    }
-
-    return dir;
 }
+namespace utils = cpputils;
+} // namespace lsst::cpputils
 
-}} // namespace lsst::cpputils
+#endif

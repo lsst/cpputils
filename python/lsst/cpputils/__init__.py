@@ -19,4 +19,11 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from .._utils._backtrace import *
+# We are raising pex exceptions from C++ so need to ensure the python
+# translations are registered.
+import lsst.pex.exceptions
+
+from ._cpputils import *
+from . import backtrace
+
+from .version import *

@@ -19,30 +19,4 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import unittest
-import lsst.utils.tests
-
-import lsst.utils
-
-
-class DeprecatedTestCase(lsst.utils.tests.TestCase):
-    def test_deprecate_pybind11(self):
-        def old(x):
-            """Docstring"""
-            return x + 1
-        # Use an unusual category
-        old = lsst.utils.deprecate_pybind11(
-            old, reason="For testing.", version="unknown",
-            category=PendingDeprecationWarning)
-        with self.assertWarnsRegex(
-                PendingDeprecationWarning,
-                r"Call to deprecated function \(or staticmethod\) old\. \(For testing\.\) "
-                "-- Deprecated since version unknown.$"):
-            # Check that the function still works
-            self.assertEqual(old(3), 4)
-        self.assertIn("Docstring", old.__doc__)
-        self.assertIn("For testing.", old.__doc__)
-
-
-if __name__ == "__main__":
-    unittest.main()
+from .._cpputils._backtrace import *

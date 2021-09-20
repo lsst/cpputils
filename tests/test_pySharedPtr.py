@@ -22,11 +22,10 @@
 import gc
 import unittest
 
-import lsst.utils.tests
 import _inheritance
 
 
-class PySharedPtrTestSuite(lsst.utils.tests.TestCase):
+class PySharedPtrTestSuite(unittest.TestCase):
     """Test the ability of PySharedPtr to safely pass hybrid objects
     between C++ and Python."""
 
@@ -83,14 +82,5 @@ class PySharedPtrTestSuite(lsst.utils.tests.TestCase):
         self.checkGarbageCollection(self.PyCppDerived, ("42", "py-override", "py-abstract"))
 
 
-class TestMemory(lsst.utils.tests.MemoryTestCase):
-    pass
-
-
-def setup_module(module):
-    lsst.utils.tests.init()
-
-
 if __name__ == "__main__":
-    lsst.utils.tests.init()
     unittest.main()

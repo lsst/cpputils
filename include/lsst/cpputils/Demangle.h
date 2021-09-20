@@ -2,7 +2,7 @@
 
 /*
  * LSST Data Management System
- * See COPYRIGHT file at the top of the source tree.
+ * Copyright 2008, 2009, 2010 LSST Corporation.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -22,12 +22,17 @@
  * see <http://www.lsstcorp.org/LegalNotices/>.
  */
 
-#ifndef LSST_UTILS_UTILS_H
-#define LSST_UTILS_UTILS_H
+#if !defined(LSST_CPPUTILS_DEMANGLE_H)
+#define LSST_CPPUTILS_DEMANGLE_H 1
 
-// THIS FILE IS FOR BACKWARDS-COMPATIBILITY ONLY; NEW CODE SHOULD INCLUDE
-// packaging.h DIRECTLY.
+#include <string>
 
-#include "lsst/utils/packaging.h"
+namespace lsst {
+namespace cpputils {
 
+std::string demangleType(std::string const _typeName);
+
+}
+namespace utils = cpputils;
+} // namespace lsst::cpputils
 #endif

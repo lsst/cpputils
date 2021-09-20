@@ -21,13 +21,13 @@
 
 #include "pybind11/pybind11.h"
 
-#include "lsst/utils/python.h"
-#include "lsst/utils/Demangle.h"
+#include "lsst/cpputils/python.h"
+#include "lsst/cpputils/Demangle.h"
 
 namespace py = pybind11;
 
 namespace lsst {
-namespace utils {
+namespace cpputils {
 
 void wrapDemangle(python::WrapperCollection & wrappers) {
     wrappers.wrap(
