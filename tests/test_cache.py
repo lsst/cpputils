@@ -89,11 +89,13 @@ class CacheTestCase(unittest.TestCase):
         self.assertEqual(cache.capacity(), capacity, "Capacity unchanged")
         for ii in range(maximum - capacity):
             self.assertNotIn(ii, cache, "Should have been expunged")
+            self.assertIsNone(cache.get(ii), "Should have been expunged")
         expectedContents = list(range(maximum - 1, maximum - capacity - 1, -1))  # Last in, first out
         actualContents = cache.keys()
         for ii in expectedContents:
             self.assertIn(ii, cache, "Should be present")
             self.assertEqual(cache[ii], numberToWords(ii), "Value accessible and as expected")
+            self.assertEqual(cache.get(ii), numberToWords(ii), "Value accessible via get and as expected")
         self.assertListEqual(actualContents, expectedContents, "Contents are as expected")
         with self.assertRaises(LookupError):
             cache[maximum - capacity - 1]

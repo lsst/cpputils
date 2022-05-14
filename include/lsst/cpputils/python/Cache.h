@@ -49,6 +49,7 @@ void declareCache(py::module & mod, std::string const& name) {
                 return self(key, func);
             }, "key"_a, "func"_a);
     cls.def("__getitem__", &Class::operator[]);
+    cls.def("get", &Class::get);
     cls.def("add", &Class::add, "key"_a, "value"_a);
     cls.def("size", &Class::size);
     cls.def("__len__", &Class::size);

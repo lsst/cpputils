@@ -23,6 +23,7 @@
 #define LSST_CPPUTILS_CACHE_H
 
 #include <vector>
+#include <optional>
 #include <utility>  // std::pair
 
 #include "boost/multi_index_container.hpp"
@@ -175,6 +176,23 @@ class Cache {
      * system in a valid but unpredictable state.
      */
     bool contains(Key const& key) { return _lookup(key).second; }
+
+    /** Return the cached value if it exists.
+     *
+     * If the key is in the cache, it will be promoted to the
+     * most recently used value.
+     *
+     * @exceptsafe Basic exception safety: exceptions will leave the
+     * system in a valid but unpredictable state.
+     */
+    std::optional<Value> get(Key const& key) {
+        auto result = _lookup(key);
+        if (result.second) {
+            return std::optional<Value>(result.first->second);
+        } else {
+            return std::optional<Value>();
+        }
+    }
 
     /** Return the capacity of the cache
      *
