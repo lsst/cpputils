@@ -22,7 +22,7 @@
 #ifndef LSST_CPPUTILS_CACHE_FWD_H
 #define LSST_CPPUTILS_CACHE_FWD_H
 
-/** Forward declarations for lsst::cpputils::Cache
+/* Forward declarations for lsst::cpputils::Cache
  *
  * For details on the Cache class, see the Cache.h file.
  */
