@@ -25,8 +25,8 @@ import unittest
 import _inheritance
 
 
-class PySharedPtrTestSuite(unittest.TestCase):
-    """Test the ability of PySharedPtr to safely pass hybrid objects
+class SmartHolderTestSuite(unittest.TestCase):
+    """Test the ability of pybind11 to safely pass hybrid objects
     between C++ and Python."""
 
     class PyDerived(_inheritance.CppBase):
@@ -52,7 +52,8 @@ class PySharedPtrTestSuite(unittest.TestCase):
             return "py-abstract"
 
     def checkGarbageCollection(self, concreteClass, returns):
-        """Generic test for whether a C++/Python class survives garbage collection.
+        """Generic test for whether a C++/Python class survives garbage
+        collection.
 
         Parameters
         ----------

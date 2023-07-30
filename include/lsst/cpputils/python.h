@@ -53,7 +53,7 @@ Example:
 
 lsst::afw::table records are considered equal if two `std::shared_ptr<record>` point to the same record.
 This is wrapped as follows for `lsst::afw::table::BaseRecord`, where `cls` is an instance of
-`pybind11::class_<BaseRecord, std::shared_ptr<BaseRecord>>)`:
+`pybind11::class_<BaseRecord>)`:
 
     utils::addSharedPtrEquality<BaseRecord>(cls);
 
