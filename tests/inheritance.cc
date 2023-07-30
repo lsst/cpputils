@@ -24,8 +24,6 @@
 #include <memory>
 #include <string>
 
-#include "lsst/cpputils/python/PySharedPtr.h"
-
 namespace py = pybind11;
 using namespace pybind11::literals;
 
@@ -72,11 +70,11 @@ std::string printFromCpp(CppBase const& obj) {
 }
 
 PYBIND11_MODULE(_inheritance, mod) {
-    py::class_<CppBase, Trampoline<>, PySharedPtr<CppBase>>(mod, "CppBase").def(py::init<>());
-    py::class_<CppDerived, Trampoline<CppDerived>, CppBase, PySharedPtr<CppDerived>>(mod, "CppDerived")
+    py::class_<CppBase, Trampoline<>>(mod, "CppBase").def(py::init<>());
+    py::class_<CppDerived, Trampoline<CppDerived>, CppBase>(mod, "CppDerived")
             .def(py::init<>());
 
-    py::class_<CppStorage, std::shared_ptr<CppStorage>>(mod, "CppStorage")
+    py::class_<CppStorage>(mod, "CppStorage")
             .def(py::init<std::shared_ptr<CppBase>>());
 
     mod.def("getFromStorage", &getFromStorage, "holder"_a);
