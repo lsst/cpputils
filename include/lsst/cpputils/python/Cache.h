@@ -23,14 +23,19 @@
  */
 
 #include <functional>  // for std::function
-#include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
-#include "pybind11/functional.h"  // for binding std::function
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/bind_vector.h>
+#include <nanobind/stl/bind_map.h>
+#include <nanobind/stl/vector.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/operators.h>
 
 #include "lsst/cpputils/Cache.h"
-
-namespace py = pybind11;
-using namespace pybind11::literals;
+#include <iostream>
+namespace nb = nanobind;
+using namespace nb::literals;
 
 namespace lsst {
 namespace cpputils {
@@ -38,14 +43,14 @@ namespace python {
 
 template <typename Key, typename Value, typename KeyHash=boost::hash<Key>,
           typename KeyPred=std::equal_to<Key>>
-void declareCache(py::module & mod, std::string const& name) {
+void declareCache(nb::module_ & mod, std::string const& name) {
     typedef lsst::cpputils::Cache<Key, Value, KeyHash, KeyPred> Class;
-    py::class_<Class> cls(mod, name.c_str());
+    nb::class_<Class> cls(mod, name.c_str());
 
-    cls.def(py::init<std::size_t>(), "maxElements"_a=0);
+    cls.def(nb::init<std::size_t>(), "maxElements"_a=0);
     cls.def("__call__",
             [](Class & self, Key const& key, std::function<Value(Key const& key)> func) {
-                py::gil_scoped_release release;
+                nb::gil_scoped_release release;
                 return self(key, func);
             }, "key"_a, "func"_a);
     cls.def("__getitem__", &Class::operator[]);

@@ -73,6 +73,7 @@ class SmartHolderTestSuite(unittest.TestCase):
         self.assertIsInstance(retrieved, concreteClass)
         self.assertEqual(_inheritance.printFromCpp(retrieved), " ".join(returns))
 
+    @unittest.skip("No equivalent  for mulitple inheritance in nanobind")
     def testPyDerivedGarbageCollection(self):
         self.checkGarbageCollection(self.PyDerived, ("42", "", "py-abstract"))
 
