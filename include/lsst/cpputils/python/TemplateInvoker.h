@@ -24,9 +24,12 @@
 #ifndef LSST_CPPUTILS_PYTHON_TEMPLATEINVOKER_H
 #define LSST_CPPUTILS_PYTHON_TEMPLATEINVOKER_H
 
-#include "pybind11/pybind11.h"
-#include "pybind11/numpy.h"
+#include <nanobind/nanobind.h>
+#include <nanobind/ndarray.h>
+#include <nanobind/ndarray.h>
 
+#include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
 #include <iostream>
 
 namespace lsst { namespace cpputils { namespace python {
@@ -34,7 +37,7 @@ namespace lsst { namespace cpputils { namespace python {
 /**
  * A helper class for wrapping C++ template functions as Python functions with dtype arguments.
  *
- * TemplateInvoker takes a templated callable object, a `pybind11::dtype`
+ * TemplateInvoker takes a templated callable object, a `nanobind::dlpack::dtype`
  * object, and a sequence of supported C++ types via its nested `Tag` struct.
  * The callable is invoked with a scalar argument of the type matching the
  * `dtype` object.  If none of the supported C++ types match, a different
@@ -111,12 +114,12 @@ public:
     struct Tag {};
 
     /// Callback type for handling unmatched-type errors.
-    using OnErrorCallback = std::function<pybind11::object(pybind11::dtype const & dtype)>;
+    using OnErrorCallback = std::function<nanobind::object(nanobind::dlpack::dtype const & dtype)>;
 
     /// Callback used for handling unmatched-type errors by default.
-    static pybind11::object handleErrorDefault(pybind11::dtype const & dtype) {
-        PyErr_Format(PyExc_TypeError, "dtype '%R' not supported.", dtype.ptr());
-        throw pybind11::error_already_set();
+    static nanobind::object handleErrorDefault(nanobind::dlpack::dtype const & dtype) {
+        PyErr_Format(PyExc_TypeError, "dtype '%R' not supported.", dtype);
+        throw nanobind::type_error();
     }
 
     /**
@@ -153,9 +156,9 @@ public:
      * @exceptsafe the same as the exception safety of `function`
      */
     template <typename Function, typename ...TypesToTry>
-    pybind11::object apply(
+    nanobind::object apply(
         Function function,
-        pybind11::dtype const & dtype,
+        nanobind::dlpack::dtype const & dtype,
         Tag<TypesToTry...> typesToTry
     ) const {
         return _apply(function, dtype, typesToTry);
@@ -164,16 +167,16 @@ public:
 private:
 
     template <typename Function>
-    pybind11::object _apply(Function & function, pybind11::dtype const & dtype, Tag<>) const {
+    nanobind::object _apply(Function & function, nanobind::dlpack::dtype const & dtype, Tag<>) const {
         return _onError(dtype);
     }
 
     template <typename Function, typename T, typename ...A>
-    pybind11::object _apply(Function & function, pybind11::dtype const & dtype, Tag<T, A...>) const {
-        if (pybind11::detail::npy_api::get().PyArray_EquivTypes_(dtype.ptr(),
-                                                                 pybind11::dtype::of<T>().ptr())) {
-            return pybind11::cast(function(static_cast<T>(0)));
-        }
+    nanobind::object _apply(Function & function, nanobind::dlpack::dtype const & dtype, Tag<T, A...>) const {
+       // if (pybind11::detail::npy_api::get().PyArray_EquivTypes_(dtype.ptr(),
+        //                                                         nanobind::dlpack::dtype::of<T>().ptr())) {
+     //       return pybind11::cast(function(static_cast<T>(0)));
+    //    }
         return _apply(function, dtype, Tag<A...>());
     }
 

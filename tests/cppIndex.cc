@@ -19,21 +19,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
+#include <nanobind/nanobind.h>
 
 #include <utility>
 
 #include "lsst/cpputils/python.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace lsst {
 namespace cpputils {
 namespace python {
 
-PYBIND11_MODULE(_cppIndex, mod) {
+NB_MODULE(_cppIndex, mod) {
     // wrap cppIndex in order to make it easy to test
     mod.def("cppIndex", (std::size_t(*)(std::ptrdiff_t, std::ptrdiff_t))cppIndex, "size"_a, "i"_a);
     mod.def("cppIndex", (std::pair<std::size_t, std::size_t>(*)(std::ptrdiff_t, std::ptrdiff_t,

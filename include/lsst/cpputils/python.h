@@ -24,7 +24,11 @@
 #ifndef LSST_CPPUTILS_PYTHON_H
 #define LSST_CPPUTILS_PYTHON_H
 
-#include "pybind11/pybind11.h"
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/unique_ptr.h>
+#include <nanobind/stl/shared_ptr.h>
+#include <nanobind/stl/pair.h>
 
 #include <cstddef>
 #include <memory>
@@ -47,13 +51,13 @@ namespace python {
 Add `__eq__` and `__ne__` methods based on two std::shared_ptr<T> pointing to the same address
 
 @tparam T  The type to which the std::shared_ptr points.
-@tparam PyClass  The pybind11 class_ type; this can be automatically deduced.
+@tparam PyClass  The nanobind class_ type; this can be automatically deduced.
 
 Example:
 
 lsst::afw::table records are considered equal if two `std::shared_ptr<record>` point to the same record.
 This is wrapped as follows for `lsst::afw::table::BaseRecord`, where `cls` is an instance of
-`pybind11::class_<BaseRecord, std::shared_ptr<BaseRecord>>)`:
+`nanobind::class_<BaseRecord, std::shared_ptr<BaseRecord>>)`:
 
     utils::addSharedPtrEquality<BaseRecord>(cls);
 
@@ -63,10 +67,10 @@ template<typename T, typename PyClass>
 inline void addSharedPtrEquality(PyClass & cls) {
     cls.def("__eq__",
             [](std::shared_ptr<T> self, std::shared_ptr<T> other) { return self.get() == other.get(); },
-            pybind11::is_operator());
+            nanobind::is_operator());
     cls.def("__ne__",
             [](std::shared_ptr<T> self, std::shared_ptr<T> other) { return self.get() != other.get(); },
-            pybind11::is_operator());
+            nanobind::is_operator());
 }
 
 /**
@@ -76,7 +80,7 @@ inline void addSharedPtrEquality(PyClass & cls) {
  * `__str__` and `__repr__`. It can also be used to define any Python method
  * that takes no arguments and returns a string, regardless of name.
  *
- * @tparam PyClass The pybind11 class_ type. The wrapped class must
+ * @tparam PyClass The nanobind class_ type. The wrapped class must
  *                 support << as a stream output operator.
  *
  * @param cls The `PyClass` object to which to add a wrapper.
@@ -85,7 +89,7 @@ inline void addSharedPtrEquality(PyClass & cls) {
  */
 template <class PyClass>
 void addOutputOp(PyClass &cls, std::string const &method) {
-    cls.def(method.c_str(), [](typename PyClass::type const &self) {
+    cls.def(method.c_str(), [](typename PyClass::Type const &self) {
         std::ostringstream os;
         os << self;
         return os.str();
@@ -95,7 +99,7 @@ void addOutputOp(PyClass &cls, std::string const &method) {
 /**
  * Add `__hash__` method implemented by `std::hash`.
  *
- * @tparam PyClass The pybind11 class_ type. The wrapped class must
+ * @tparam PyClass The nanobind class_ type. The wrapped class must
  *                 have an enabled specialization of `std::hash`.
  *
  * @param cls The `PyClass` object to which to add a wrapper.
@@ -130,7 +134,7 @@ inline std::size_t cppIndex(std::ptrdiff_t size, std::ptrdiff_t i) {
     if (i < 0 || i >= size) {
         std::ostringstream os;
         os << "Index " << i_orig << " not in range [" << -size << ", " << size - 1 << "]";
-        throw pybind11::index_error(os.str());
+        throw nanobind::index_error(os.str().c_str());
     }
     return static_cast<std::size_t>(i);
 }
@@ -156,12 +160,12 @@ inline std::pair<std::size_t, std::size_t> cppIndex(std::ptrdiff_t size_i, std::
         os << "Index (" << i << ", " << j << ") not in range ["
            << -size_i << ", " << size_i - 1 << "], ["
            << -size_j << ", " << size_j - 1 << "]";
-        throw pybind11::index_error(os.str());
+        throw nanobind::index_error(os.str().c_str());
     }
 }
 
 /**
- * A helper class for subdividing pybind11 module across multiple translation
+ * A helper class for subdividing nanobind module across multiple translation
  * units (i.e. source files).
  *
  * Merging wrappers for different classes into a single compiled module can
@@ -169,13 +173,13 @@ inline std::pair<std::size_t, std::size_t> cppIndex(std::ptrdiff_t size_i, std::
  * for multiple wrappers into a single file slows down incremental rebuilds
  * and makes editing unwieldy.  The right approach is to define wrappers in
  * different source files and link them into a single module at build time.
- * In simple cases, that's quite straightforward: pybind11 declarations are
+ * In simple cases, that's quite straightforward: nanobind declarations are
  * just regular C++ statements, and you can factor them out into different
  * functions in different source files.
  *
  * That approach doesn't work so well when the classes being wrapped are
  * interdependent, because bindings are only guaranteed to work when all types
- * used in a wrapped method signature have been declared to pybind11 before
+ * used in a wrapped method signature have been declared to nanobind before
  * the method using them is itself declared.  Naively, then, each source file
  * would thus have to have multiple wrapper-declaring functions, so all
  * type-wrapping functions could be executed before any method-wrapping
@@ -240,11 +244,11 @@ inline std::pair<std::size_t, std::size_t> cppIndex(std::ptrdiff_t size_i, std::
  * parameters) to reduce verbosity.
  */
 class LSST_PRIVATE WrapperCollection final {
-    // LSST_PRIVATE above: don't export symbols used only in pybind11 wrappers
+    // LSST_PRIVATE above: don't export symbols used only in nanobind wrappers
 public:
 
     /// Function handle type used to hold deferred wrapper declaration functions.
-    using WrapperCallback = std::function<void(pybind11::module &)>;
+    using WrapperCallback = std::function<void(nanobind::module_ &)>;
 
     /**
      * Construct a new WrapperCollection.
@@ -261,7 +265,7 @@ public:
      *                     addition to confusing users, this will prevent
      *                     unpickling from working).
      */
-    explicit WrapperCollection(pybind11::module module_, std::string const & package) :
+    explicit WrapperCollection(nanobind::module_ module_, std::string const & package) :
         module(module_),
         _package(package)
     {}
@@ -341,7 +345,7 @@ public:
      * @param[in] name  Name of the module to import (absolute).
      */
     void addInheritanceDependency(std::string const & name) {
-        pybind11::module::import(name.c_str());
+        nanobind::module_::import_(name.c_str());
     }
 
     /**
@@ -362,8 +366,8 @@ public:
      * Add a set of wrappers without defining a class.
      *
      * @param[in] function A callable object that takes a single
-     *                     `pybind11::module` argument (by reference) and
-     *                     adds pybind11 wrappers to it, to be called later
+     *                     `nanobind::module` argument (by reference) and
+     *                     adds nanobind wrappers to it, to be called later
      *                     by `finish()`.
      */
     void wrap(WrapperCallback function) {
@@ -374,9 +378,9 @@ public:
      * Add a type (class or enum) wrapper, deferring method and other
      * attribute definitions until finish() is called.
      *
-     * @param[in] cls       A `pybind11::class_` or `enum_` instance.
-     * @param[in] function  A callable object that takes a `pybind11::module`
-     *                      argument and a `pybind11::class_` (or `enum_`)
+     * @param[in] cls       A `nanobind::class_` or `enum_` instance.
+     * @param[in] function  A callable object that takes a `nanobind::module`
+     *                      argument and a `nanobind::class_` (or `enum_`)
      *                      argument (both by reference) and defines wrappers
      *                      for the class's methods and other attributes.
      *                      Will be called with `this->module` and `cls` by
@@ -394,7 +398,7 @@ public:
         }
         // lambda below is mutable so it can modify the captured `cls` variable
         wrap(
-            [cls=cls, function=std::move(function)] (pybind11::module & mod) mutable -> void {
+            [cls=cls, function=std::move(function)] (nanobind::module_ & mod) mutable -> void {
                 function(mod, cls);
             }
         );
@@ -414,7 +418,7 @@ public:
      *                           the package string this `WrapperCollection`
      *                           was initialized with.
      *
-     * @return a `pybind11::class_` instance (template parameters unspecified)
+     * @return a `nanobind::class_` instance (template parameters unspecified)
      *         representing the Python type of the new exception.
      */
     template <typename CxxException, typename CxxBase>
@@ -434,7 +438,7 @@ public:
      */
     void finish() {
         for (auto dep = _dependencies.begin(); dep != _dependencies.end(); dep = _dependencies.erase(dep)) {
-            pybind11::module::import(dep->c_str());
+            nanobind::module_::import_(dep->c_str());
         }
         for (auto def = _definitions.begin(); def != _definitions.end(); def = _definitions.erase(def)) {
             (def->second)(def->first);  // WrapperCallback(module)
@@ -445,12 +449,12 @@ public:
      * The module object passed to the `PYBIND11_MODULE` block that contains
      * this WrapperCollection.
      */
-    pybind11::module module;
+    nanobind::module_ module;
 
 private:
     std::string _package;
     std::list<std::string> _dependencies;
-    std::list<std::pair<pybind11::module, WrapperCallback>> _definitions;
+    std::list<std::pair<nanobind::module_, WrapperCallback>> _definitions;
 };
 
 

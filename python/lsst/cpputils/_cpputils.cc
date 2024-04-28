@@ -19,7 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "pybind11/pybind11.h"
+#include "nanobind/nanobind.h"
 
 #include "lsst/cpputils/python.h"
 
@@ -29,7 +29,7 @@ namespace cpputils {
 void wrapBacktrace(python::WrapperCollection & wrappers);
 void wrapDemangle(python::WrapperCollection & wrappers);
 
-PYBIND11_MODULE(_cpputils, mod) {
+NB_MODULE(_cpputils, mod) {
     python::WrapperCollection wrappers(mod, "_cpputils");
     {
         auto backtraceWrappers = wrappers.makeSubmodule("backtrace");
