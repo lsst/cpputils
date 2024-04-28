@@ -22,15 +22,15 @@
 #include <limits>
 #include <sstream>
 
-#include "pybind11/pybind11.h"
-#include "pybind11/operators.h"
-#include "pybind11/numpy.h"
+#include <nanobind/nanobind.h>
+#include <nanobind/operators.h>
+#include <nanobind/ndarray.h>
 
 #include "lsst/cpputils/python.h"
 #include "lsst/cpputils/python/TemplateInvoker.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nb::literals;
 
 class Example {
 public:
@@ -89,13 +89,13 @@ struct TypeHolder {};
 
 // Pybind11 wrapers for TypeHolder
 template <typename T>
-void declareTypeHolder(py::module & mod, std::string const & suffix) {
+void declareTypeHolder(nb::module_ & mod, std::string const & suffix) {
     static std::string const name = "TypeHolder" + suffix;
-    py::class_<TypeHolder<T>> cls(mod, name.c_str());
-    cls.def_property_readonly(
+    nb::class_<TypeHolder<T>> cls(mod, name.c_str());
+    cls.def_prop_ro(
         "dtype",
         [](TypeHolder<T> const & self) {
-            return py::dtype::of<T>();
+            return nb::dtype<T>();
         }
     );
 }
@@ -110,11 +110,11 @@ TypeHolder<T> returnTypeHolder() {
 
 void wrapExample(lsst::cpputils::python::WrapperCollection & wrappers) {
     wrappers.wrapType(
-        py::class_<Example>(wrappers.module, "Example"),
+        nb::class_<Example>(wrappers.module, "Example"),
         [](auto & mod, auto & cls) {
-            cls.def(py::init<std::string const &>());
-            cls.def(py::init<bool>());
-            cls.def(py::init<Example const &>());
+            cls.def(nb::init<std::string const &>());
+            cls.def(nb::init<bool>());
+            cls.def(nb::init<Example const &>());
 
             cls.def("get1", &Example::get1);
             cls.def("get2", &Example::get1);
@@ -123,8 +123,8 @@ void wrapExample(lsst::cpputils::python::WrapperCollection & wrappers) {
             cls.def("getValue", &Example::getValue);
             cls.def("setValue", &Example::setValue);
 
-            cls.def(py::self == py::self);
-            cls.def(py::self != py::self);
+            cls.def(nb::self == nb::self);
+            cls.def(nb::self != nb::self);
 
             lsst::cpputils::python::addOutputOp(cls, "__str__");
             lsst::cpputils::python::addOutputOp(cls, "__repr__");
@@ -133,7 +133,7 @@ void wrapExample(lsst::cpputils::python::WrapperCollection & wrappers) {
 }
 
 
-PYBIND11_MODULE(_example, mod) {
+NB_MODULE(_example, mod) {
     lsst::cpputils::python::WrapperCollection wrappers(mod, "example");
     wrapExample(wrappers);
     wrappers.wrap(
@@ -169,11 +169,12 @@ PYBIND11_MODULE(_example, mod) {
 
             mod.def(
                 "returnTypeHolder",
-                [](py::dtype const & dtype) {
+                [](nb::dlpack::dtype const & dtype) {
                     return lsst::cpputils::python::TemplateInvoker(
                         // lambda to handle errors
-                        [](py::dtype const & dtype) -> py::object {
-                            return py::none();
+
+                        [](nb::dlpack::dtype const & dtype) -> nb::object {
+                            return nb::none();
                         }
                     ).apply(
                         // universal lambda to handle successful match

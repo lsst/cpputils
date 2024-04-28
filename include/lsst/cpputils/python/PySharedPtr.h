@@ -24,7 +24,8 @@
 #ifndef LSST_CPPUTILS_PYTHON_PYSHAREDPTR_H
 #define LSST_CPPUTILS_PYTHON_PYSHAREDPTR_H
 
-#include "pybind11/pybind11.h"
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
 
 #include <memory>
 
@@ -59,7 +60,7 @@ public:
     explicit PySharedPtr(T* const ptr) : _impl() {
         if (ptr != nullptr) {
             // `cast` returns new PyObject only if `*ptr` not yet associated with one
-            PyObject* pyObj = pybind11::cast(ptr).ptr();
+            PyObject* pyObj = nanobind::cast(ptr);
             Py_INCREF(pyObj);
             // if any operation with shared_ptr fails, pyObj will get decremented correctly
             std::shared_ptr<PyObject> manager(pyObj, [](PyObject* const obj) noexcept {
@@ -89,6 +90,6 @@ private:
 }  // namespace lsst
 
 // Macro must be called in the global namespace
-PYBIND11_DECLARE_HOLDER_TYPE(T, lsst::cpputils::python::PySharedPtr<T>);
+//PYBIND11_DECLARE_HOLDER_TYPE(T, lsst::cpputils::python::PySharedPtr<T>);
 
 #endif

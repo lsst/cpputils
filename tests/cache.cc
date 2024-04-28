@@ -21,7 +21,7 @@
 
 #include "lsst/cpputils/python/Cache.h"
 
-PYBIND11_MODULE(_cache, mod) {
+NB_MODULE(_cache, mod) {
     lsst::cpputils::Cache<int, std::string> cache;
     lsst::cpputils::python::declareCache<int, std::string>(mod, "NumbersCache");
 }

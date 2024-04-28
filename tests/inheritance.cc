@@ -19,15 +19,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "pybind11/pybind11.h"
+#include <nanobind/nanobind.h>
+#include <nanobind/trampoline.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/shared_ptr.h>
 
 #include <memory>
 #include <string>
 
-#include "lsst/cpputils/python/PySharedPtr.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nb::literals;
 
 namespace lsst {
 namespace cpputils {
@@ -52,10 +54,9 @@ public:
 template <class Base = CppBase>
 class Trampoline : public Base {
 public:
-    using Base::Base;
-
-    std::string overridable() const override { PYBIND11_OVERLOAD(std::string, Base, overridable, ); }
-    std::string abstract() const override { PYBIND11_OVERLOAD_PURE(std::string, Base, abstract, ); }
+    NB_TRAMPOLINE(Base ,2);
+    std::string overridable() const override { NB_OVERRIDE(overridable); }
+    std::string abstract() const override { NB_OVERRIDE_PURE(abstract); }
 };
 
 class CppStorage final {
@@ -71,13 +72,13 @@ std::string printFromCpp(CppBase const& obj) {
     return obj.nonOverridable() + " " + obj.overridable() + " " + obj.abstract();
 }
 
-PYBIND11_MODULE(_inheritance, mod) {
-    py::class_<CppBase, Trampoline<>, PySharedPtr<CppBase>>(mod, "CppBase").def(py::init<>());
-    py::class_<CppDerived, Trampoline<CppDerived>, CppBase, PySharedPtr<CppDerived>>(mod, "CppDerived")
-            .def(py::init<>());
+NB_MODULE(_inheritance, mod) {
+    nb::class_<CppBase, Trampoline<>>(mod, "CppBase").def(nb::init<>());
+    nb::class_<CppDerived, Trampoline<CppDerived>, CppBase>(mod, "CppDerived")
+            .def(nb::init<>());
 
-    py::class_<CppStorage, std::shared_ptr<CppStorage>>(mod, "CppStorage")
-            .def(py::init<std::shared_ptr<CppBase>>());
+    nb::class_<CppStorage>(mod, "CppStorage")
+            .def(nb::init<std::shared_ptr<CppBase>>());
 
     mod.def("getFromStorage", &getFromStorage, "holder"_a);
     mod.def("printFromCpp", &printFromCpp);

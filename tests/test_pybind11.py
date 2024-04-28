@@ -185,6 +185,7 @@ class Pybind11TestCase(unittest.TestCase):
                         with self.assertRaises(IndexError):
                             cppIndex(size0, size1, negbad0, negbad1)
 
+    @unittest.skip("No equivalent in nanonbind for py::dtpye")
     def testTemplateInvoker(self):
         """Test using TemplateInvoker to transform a C++ template to a
         Python function with a dtype argument.
