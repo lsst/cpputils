@@ -106,7 +106,7 @@ void addOutputOp(PyClass &cls, std::string const &method) {
  */
 template <class PyClass>
 void addHash(PyClass &cls) {
-    using Class = typename PyClass::type;
+    using Class = typename PyClass::Type;
     cls.def("__hash__", [](Class const &self) {
         static auto const hash = std::hash<Class>();
         return hash(self);
