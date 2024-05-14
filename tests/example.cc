@@ -169,11 +169,11 @@ NB_MODULE(_example, mod) {
 
             mod.def(
                 "returnTypeHolder",
-                [](nb::dlpack::dtype const & dtype) {
+                [](nb::object const & dtype) {
                     return lsst::cpputils::python::TemplateInvoker(
                         // lambda to handle errors
 
-                        [](nb::dlpack::dtype const & dtype) -> nb::object {
+                        [](nb::object const & dtype) -> nb::object {
                             return nb::none();
                         }
                     ).apply(
