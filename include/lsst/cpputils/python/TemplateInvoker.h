@@ -114,11 +114,11 @@ public:
     struct Tag {};
 
     /// Callback type for handling unmatched-type errors.
-    using OnErrorCallback = std::function<nanobind::object(nanobind::dlpack::dtype const & dtype)>;
+    using OnErrorCallback = std::function<nanobind::object(nanobind::object const & dtype)>;
 
     /// Callback used for handling unmatched-type errors by default.
-    static nanobind::object handleErrorDefault(nanobind::dlpack::dtype const & dtype) {
-        PyErr_Format(PyExc_TypeError, "dtype '%R' not supported.", dtype);
+    static nanobind::object handleErrorDefault(nanobind::object const & dtype) {
+        PyErr_Format(PyExc_TypeError, "dtype '%s' not supported.", dtype.ptr()->ob_type->tp_name);
         throw nanobind::type_error();
     }
 
@@ -158,7 +158,7 @@ public:
     template <typename Function, typename ...TypesToTry>
     nanobind::object apply(
         Function function,
-        nanobind::dlpack::dtype const & dtype,
+        nanobind::object const & dtype,
         Tag<TypesToTry...> typesToTry
     ) const {
         return _apply(function, dtype, typesToTry);
@@ -167,12 +167,12 @@ public:
 private:
 
     template <typename Function>
-    nanobind::object _apply(Function & function, nanobind::dlpack::dtype const & dtype, Tag<>) const {
+    nanobind::object _apply(Function & function, nanobind::object const & dtype, Tag<>) const {
         return _onError(dtype);
     }
 
     template <typename Function, typename T, typename ...A>
-    nanobind::object _apply(Function & function, nanobind::dlpack::dtype const & dtype, Tag<T, A...>) const {
+    nanobind::object _apply(Function & function, nanobind::object const & dtype, Tag<T, A...>) const {
        // if (pybind11::detail::npy_api::get().PyArray_EquivTypes_(dtype.ptr(),
         //                                                         nanobind::dlpack::dtype::of<T>().ptr())) {
      //       return pybind11::cast(function(static_cast<T>(0)));
