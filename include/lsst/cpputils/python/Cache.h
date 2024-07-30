@@ -62,7 +62,6 @@ void declareCache(py::module & mod, std::string const& name) {
 }
 
 }}
-namespace utils = cpputils;
 } // namespace lsst::cpputils::python
 
 #endif // ifndef LSST_CPPUTILS_PYTHON_CACHE_H

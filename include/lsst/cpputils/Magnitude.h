@@ -52,7 +52,6 @@ double nanojanskyToABMagnitude(double flux);
 double ABMagnitudeToNanojansky(double magnitude);
 
 }  // namespace cpputils
-namespace utils = cpputils;
 }  // namespace lsst
 
 #endif  // LSST_CPPUTILS_MAGNITUDE_H
