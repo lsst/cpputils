@@ -40,7 +40,6 @@ namespace cpputils {
 std::string getPackageDir(std::string const& packageName);
 
 }
-namespace utils = cpputils;
 } // namespace lsst::cpputils
 
 #endif

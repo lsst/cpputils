@@ -181,7 +181,6 @@ private:
 };
 
 }}
-namespace utils = cpputils;
 }  // namespace lsst::cpputils::python
 
 #endif

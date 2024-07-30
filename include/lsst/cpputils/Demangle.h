@@ -33,6 +33,5 @@ namespace cpputils {
 std::string demangleType(std::string const _typeName);
 
 }
-namespace utils = cpputils;
 } // namespace lsst::cpputils
 #endif
