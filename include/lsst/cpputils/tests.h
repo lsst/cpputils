@@ -84,7 +84,7 @@ constexpr void assertValidHash() {
     static_assert(is_same<typename Hash::result_type, size_t>::value,
                   "std::hash must have a result_type member until C++20");
     // Ability to call Hash(T) hard to test before C++17
-    static_assert(is_same<result_of_t<Hash(T)>, size_t>::value,
+    static_assert(is_same<std::invoke_result_t<Hash, T>, size_t>::value,
                   "std::hash specializations must be callable and return a size_t");
 }
 
