@@ -28,6 +28,7 @@ namespace cpputils {
 
 void wrapBacktrace(python::WrapperCollection & wrappers);
 void wrapDemangle(python::WrapperCollection & wrappers);
+void wrapFixGamut(python::WrapperCollection & wrappers);
 
 PYBIND11_MODULE(_cpputils, mod) {
     python::WrapperCollection wrappers(mod, "_cpputils");
@@ -37,6 +38,7 @@ PYBIND11_MODULE(_cpputils, mod) {
         wrappers.collectSubmodule(std::move(backtraceWrappers));
     }
     wrapDemangle(wrappers);
+    wrapFixGamut(wrappers);
     wrappers.finish();
 }
 
