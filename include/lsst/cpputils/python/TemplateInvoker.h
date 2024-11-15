@@ -31,6 +31,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <iostream>
+#include <map>
 
 namespace lsst { namespace cpputils { namespace python {
 
@@ -170,13 +171,33 @@ private:
     nanobind::object _apply(Function & function, nanobind::object const & dtype, Tag<>) const {
         return _onError(dtype);
     }
+    static nb::dlpack::dtype get_dtype(std::string const &type) {
+        static const std::map<std::string, nb::dlpack::dtype> dtype_map = {
+                {"uint8", nb::dtype<uint8_t>()},
+                {"uint16", nb::dtype<uint16_t>()},
+                {"uint32", nb::dtype<uint32_t>()},
+                {"uint54", nb::dtype<uint64_t>()},
+                {"int8", nb::dtype<int8_t>()},
+                {"int16", nb::dtype<int16_t>()},
+                {"int32", nb::dtype<int32_t>()},
+                {"int54", nb::dtype<int64_t>()},
+                {"float32", nb::dtype<float>()},
+                {"float64", nb::dtype<double>()}
+        };
+        try {
+            auto result = dtype_map.at(type);
+            return result;
+        } catch(...) {
+            throw std::out_of_range("TemplateInvoker: Invalid type " + type);
+        }
+
+    }
 
     template <typename Function, typename T, typename ...A>
     nanobind::object _apply(Function & function, nanobind::object const & dtype, Tag<T, A...>) const {
-       // if (pybind11::detail::npy_api::get().PyArray_EquivTypes_(dtype.ptr(),
-        //                                                         nanobind::dlpack::dtype::of<T>().ptr())) {
-     //       return pybind11::cast(function(static_cast<T>(0)));
-    //    }
+        auto name = nb::cast<std::string>(dtype.attr("name"));
+        auto type = get_dtype(name);
+        if(type == nb::dtype<T>()) return nb::cast(function(static_cast<T>(0)));
         return _apply(function, dtype, Tag<A...>());
     }
 
