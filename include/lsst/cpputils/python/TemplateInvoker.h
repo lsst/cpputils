@@ -176,11 +176,11 @@ private:
                 {"uint8", nb::dtype<uint8_t>()},
                 {"uint16", nb::dtype<uint16_t>()},
                 {"uint32", nb::dtype<uint32_t>()},
-                {"uint54", nb::dtype<uint64_t>()},
+                {"uint64", nb::dtype<uint64_t>()},
                 {"int8", nb::dtype<int8_t>()},
                 {"int16", nb::dtype<int16_t>()},
                 {"int32", nb::dtype<int32_t>()},
-                {"int54", nb::dtype<int64_t>()},
+                {"int64", nb::dtype<int64_t>()},
                 {"float32", nb::dtype<float>()},
                 {"float64", nb::dtype<double>()}
         };
