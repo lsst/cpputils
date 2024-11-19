@@ -26,10 +26,7 @@
 
 #include <nanobind/nanobind.h>
 #include <nanobind/ndarray.h>
-#include <nanobind/ndarray.h>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
 #include <iostream>
 #include <map>
 
@@ -171,18 +168,18 @@ private:
     nanobind::object _apply(Function & function, nanobind::object const & dtype, Tag<>) const {
         return _onError(dtype);
     }
-    static nb::dlpack::dtype get_dtype(std::string const &type) {
-        static const std::map<std::string, nb::dlpack::dtype> dtype_map = {
-                {"uint8", nb::dtype<uint8_t>()},
-                {"uint16", nb::dtype<uint16_t>()},
-                {"uint32", nb::dtype<uint32_t>()},
-                {"uint64", nb::dtype<uint64_t>()},
-                {"int8", nb::dtype<int8_t>()},
-                {"int16", nb::dtype<int16_t>()},
-                {"int32", nb::dtype<int32_t>()},
-                {"int64", nb::dtype<int64_t>()},
-                {"float32", nb::dtype<float>()},
-                {"float64", nb::dtype<double>()}
+    static nanobind::dlpack::dtype get_dtype(std::string const &type) {
+        static const std::map<std::string, nanobind::dlpack::dtype> dtype_map = {
+                {"uint8", nanobind::dtype<uint8_t>()},
+                {"uint16", nanobind::dtype<uint16_t>()},
+                {"uint32", nanobind::dtype<uint32_t>()},
+                {"uint64", nanobind::dtype<uint64_t>()},
+                {"int8", nanobind::dtype<int8_t>()},
+                {"int16", nanobind::dtype<int16_t>()},
+                {"int32", nanobind::dtype<int32_t>()},
+                {"int64", nanobind::dtype<int64_t>()},
+                {"float32", nanobind::dtype<float>()},
+                {"float64", nanobind::dtype<double>()}
         };
         try {
             auto result = dtype_map.at(type);
@@ -195,9 +192,9 @@ private:
 
     template <typename Function, typename T, typename ...A>
     nanobind::object _apply(Function & function, nanobind::object const & dtype, Tag<T, A...>) const {
-        auto name = nb::cast<std::string>(dtype.attr("name"));
+        auto name = nanobind::cast<std::string>(dtype.attr("name"));
         auto type = get_dtype(name);
-        if(type == nb::dtype<T>()) return nb::cast(function(static_cast<T>(0)));
+        if(type == nanobind::dtype<T>()) return nanobind::cast(function(static_cast<T>(0)));
         return _apply(function, dtype, Tag<A...>());
     }
 
