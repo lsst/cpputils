@@ -358,7 +358,6 @@ Cache<Key, Value, KeyHash, KeyPred>::~Cache() {
 #endif
 
 }
-namespace utils = cpputils;
 } // namespace lsst::cpputils
 
 

@@ -62,7 +62,6 @@ private:
 };
 
 }  // namespace cpputils
-namespace utils = cpputils;
 }  // namespace lsst
 
 #endif
