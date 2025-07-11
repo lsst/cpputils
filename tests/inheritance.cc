@@ -39,6 +39,7 @@ public:
     std::string nonOverridable() const noexcept { return "42"; }
     virtual std::string overridable() const { return ""; }
     virtual std::string abstract() const = 0;
+    virtual ~CppBase() = default;
 };
 
 class CppDerived : public CppBase {
@@ -48,7 +49,7 @@ public:
 };
 
 template <class Base = CppBase>
-class Trampoline : public Base {
+class Trampoline : public Base, pybind11::trampoline_self_life_support {
 public:
     using Base::Base;
 
@@ -70,11 +71,11 @@ std::string printFromCpp(CppBase const& obj) {
 }
 
 PYBIND11_MODULE(_inheritance, mod) {
-    py::class_<CppBase, Trampoline<>>(mod, "CppBase").def(py::init<>());
-    py::class_<CppDerived, Trampoline<CppDerived>, CppBase>(mod, "CppDerived")
+    py::classh<CppBase, Trampoline<>>(mod, "CppBase").def(py::init<>());
+    py::classh<CppDerived, Trampoline<CppDerived>, CppBase>(mod, "CppDerived")
             .def(py::init<>());
 
-    py::class_<CppStorage>(mod, "CppStorage")
+    py::classh<CppStorage>(mod, "CppStorage")
             .def(py::init<std::shared_ptr<CppBase>>());
 
     mod.def("getFromStorage", &getFromStorage, "holder"_a);
