@@ -52,7 +52,7 @@ public:
 };
 
 template <class Base = CppBase>
-class Trampoline : public Base, pybind11::trampoline_self_life_support {
+class Trampoline : public Base {
 public:
     NB_TRAMPOLINE(Base ,2);
     std::string overridable() const override { NB_OVERRIDE(overridable); }
