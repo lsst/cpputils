@@ -22,6 +22,9 @@
 
 #include "lsst/cpputils/packaging.h"
 
+#include <dlfcn.h>
+
+#include <filesystem>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -42,6 +45,29 @@ std::string getPackageDir(std::string const& packageName) {
     }
 
     return dir;
+}
+
+std::string getPackageDirFromAddress(void const* addressInLibrary) {
+    // dladdr resolves an address to the shared object whose memory map contains
+    // it, regardless of which library's code is calling dladdr.  Passing an
+    // address from the target package's own library therefore yields that
+    // library's path (works identically for .so on Linux and .dylib on macOS).
+    Dl_info info{};
+    if (dladdr(addressInLibrary, &info) == 0 || info.dli_fname == nullptr) {
+        throw LSST_EXCEPT(lsst::pex::exceptions::NotFoundError,
+                          "Could not locate the shared library for the given address");
+    }
+
+    std::error_code ec;
+    std::filesystem::path libraryPath = std::filesystem::canonical(info.dli_fname, ec);
+    if (ec) {
+        throw LSST_EXCEPT(lsst::pex::exceptions::NotFoundError,
+                          "Could not resolve shared library path '" +
+                                  std::string(info.dli_fname) + "': " + ec.message());
+    }
+
+    // .../<packageRoot>/lib/lib<name>.{so,dylib} -> <packageRoot>
+    return libraryPath.parent_path().parent_path().string();
 }
 
 }} // namespace lsst::cpputils
