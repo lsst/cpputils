@@ -42,4 +42,15 @@ BOOST_AUTO_TEST_CASE(GetPackage) {
                       lsst::pex::exceptions::NotFoundError);
 }
 
+BOOST_AUTO_TEST_CASE(GetPackageDirFromAddress) {
+    // The address of a symbol defined in libcpputils resolves, via dladdr, to
+    // the cpputils package directory -- independent of any environment variable.
+    auto anchor = reinterpret_cast<void const *>(&getPackageDirFromAddress);
+    std::filesystem::path cpputilsPath{getPackageDirFromAddress(anchor)};
+    BOOST_CHECK(std::filesystem::is_regular_file(cpputilsPath / "tests" / "test_packaging.cc"));
+    // It must agree with the environment-variable-based lookup for the same package.
+    BOOST_CHECK_EQUAL(std::filesystem::canonical(cpputilsPath),
+                      std::filesystem::canonical(getPackageDir("cpputils")));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

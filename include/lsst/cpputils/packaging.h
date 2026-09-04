@@ -39,6 +39,23 @@ namespace cpputils {
  */
 std::string getPackageDir(std::string const& packageName);
 
+/*!
+ * \brief return the root directory of the package whose shared library contains
+ *        the given address
+ *
+ * The address is resolved to its containing shared library via `dladdr`, and the
+ * package root is derived from that library's location (`.../lib/libFoo.so` ->
+ * `...`).  This allows a package to locate its own data files without relying on
+ * environment variables, provided the address belongs to a symbol compiled into
+ * that package's own shared library.
+ *
+ * \param[in] addressInLibrary  address of a symbol residing in the target
+ *                              package's shared library
+ *
+ * \throw lsst::pex::exceptions::NotFoundError if the library cannot be located
+ */
+std::string getPackageDirFromAddress(void const* addressInLibrary);
+
 }
 } // namespace lsst::cpputils
 
