@@ -48,6 +48,13 @@ std::string getPackageDir(std::string const& packageName) {
 }
 
 std::string getPackageDirFromAddress(void const* addressInLibrary) {
+    // A null pointer is a caller precondition violation, not a lookup failure;
+    // reject it explicitly rather than relying on dladdr's unspecified behavior.
+    if (addressInLibrary == nullptr) {
+        throw LSST_EXCEPT(lsst::pex::exceptions::InvalidParameterError,
+                          "Null address passed to getPackageDirFromAddress");
+    }
+
     // dladdr resolves an address to the shared object whose memory map contains
     // it, regardless of which library's code is calling dladdr.  Passing an
     // address from the target package's own library therefore yields that
